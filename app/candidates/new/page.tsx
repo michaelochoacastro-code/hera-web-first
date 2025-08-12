@@ -22,7 +22,7 @@ export default function NewCandidatePage() {
   };
 
   return (
-    <main>
+    <main style={{padding:16, maxWidth:720, margin:'0 auto'}}>
       <h1>Nuevo candidato</h1>
       <input placeholder="Nombre" value={name} onChange={e=>setName(e.target.value)} />
       <input placeholder="Email (opcional)" value={email} onChange={e=>setEmail(e.target.value)} />
