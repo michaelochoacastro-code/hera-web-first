@@ -1,7 +1,7 @@
 export const runtime = 'nodejs';
 
 import { NextResponse } from 'next/server';
-import { supabaseAdmin as supabase } from '@/lib/supabaseAdmin';
+import { supabaseAdmin as supabase } from '../../../lib/supabaseAdmin';
 import pdf from 'pdf-parse';
 
 async function embed(text: string): Promise<number[]> {
@@ -17,10 +17,7 @@ async function embed(text: string): Promise<number[]> {
     })
   });
   const data = await resp.json();
-  if (!resp.ok) {
-    console.error('Embeddings error:', data);
-    throw new Error(data.error?.message || 'Error generando embeddings');
-  }
+  if (!resp.ok) throw new Error(data.error?.message || 'Error generando embeddings');
   return data.data[0].embedding;
 }
 
@@ -46,25 +43,17 @@ export async function POST(req: Request) {
 
     const parsed = await pdf(buffer);
     const text = (parsed.text || '').slice(0, 5000) || `${name} ${email}`;
-
     const e = await embed(text);
 
     const { data, error } = await supabase
       .from('candidates')
-      .insert({
-        name,
-        email,
-        resume_url: upload?.path,
-        profile_json: { len: text.length },
-        embedding: e
-      })
+      .insert({ name, email, resume_url: upload?.path, profile_json: { len: text.length }, embedding: e })
       .select('id')
       .single();
 
     if (error) return NextResponse.json({ error: error.message }, { status: 400 });
-
     return NextResponse.json({ id: data.id, resume_url: upload?.path });
-  } catch (err: any) {
+  } catch (err:any) {
     return NextResponse.json({ error: err.message || 'Error' }, { status: 500 });
   }
 }
