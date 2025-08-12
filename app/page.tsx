@@ -1,8 +1,12 @@
-export default function Home() {
+export default function Home(){
   return (
-    <main>
+    <main style={{padding:16}}>
       <h1>Hera Talent Match</h1>
-      <p>Bienvenido a la plataforma de matching de talento.</p>
+      <ul>
+        <li>/jobs/new — Crear vacante</li>
+        <li>/candidates/new — Subir candidato</li>
+        <li>/match — Ejecutar matching</li>
+      </ul>
     </main>
   )
 }
