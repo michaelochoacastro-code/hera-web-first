@@ -4,7 +4,8 @@ export const dynamic = 'force-dynamic';
 import { NextResponse } from 'next/server';
 import { supabaseAdmin as supabase } from '../../../lib/supabaseAdmin';
 
-// Cargaremos pdf-parse dinámicamente dentro del handler para que en build no intente leer nada
+// importaremos pdf-parse DENTRO del handler, no arriba
+
 async function embed(text: string): Promise<number[]> {
   const resp = await fetch('https://api.openai.com/v1/embeddings', {
     method: 'POST',
@@ -24,8 +25,7 @@ async function embed(text: string): Promise<number[]> {
 
 export async function POST(req: Request) {
   try {
-    // import dinámico de pdf-parse SOLO cuando se usa
-    const pdf = (await import('pdf-parse')).default;
+    const pdf = (await import('pdf-parse')).default; // <- import dinámico
 
     const form = await req.formData();
     const name = String(form.get('name') || '');
