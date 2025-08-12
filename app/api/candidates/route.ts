@@ -4,7 +4,7 @@ export const dynamic = 'force-dynamic';
 import { NextResponse } from 'next/server';
 import { supabaseAdmin as supabase } from '../../../lib/supabaseAdmin';
 
-// importaremos pdf-parse DENTRO del handler, no arriba
+// OJO: NO importes pdf-parse aquí arriba
 
 async function embed(text: string): Promise<number[]> {
   const resp = await fetch('https://api.openai.com/v1/embeddings', {
